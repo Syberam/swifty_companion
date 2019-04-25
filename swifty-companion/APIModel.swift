@@ -11,7 +11,7 @@ import Foundation
 
 struct TokenAPI: Codable {
     var access_token: String?
-    var created_at: Date
+    var created_at: Int
     var expires_in: Int
 }
 

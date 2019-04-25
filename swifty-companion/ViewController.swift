@@ -19,7 +19,7 @@ let grantType = "client_credentials"
 let redirectURI = "https://www.42.fr"
 let signInURL = "https://signin.intra.42.fr"
 let signOutURL = "https://signin.intra.42.fr/users/sign_out"
-var TOKEN:TokenAPI = TokenAPI(access_token:"", created_at:Date(), expires_in:0)
+var TOKEN:TokenAPI = TokenAPI(access_token:"", created_at:Int(Date().timeIntervalSince1970), expires_in:0)
 var USERID = ""
 
 
@@ -69,9 +69,12 @@ class ViewController: UIViewController, UISearchBarDelegate {
     
     func getUserInfo(toFind: String) -> Int64
     {
-       // if (TOKEN.created_at + TOKEN.expires_in == Date()){
+       if (TOKEN.created_at + TOKEN.expires_in <= Int(Date().timeIntervalSince1970)){
             exchangeCodeForToken()
-       // }
+       }
+    else{
+        print(Date(timeIntervalSince1970: Double(TOKEN.created_at)))
+    }
         if (toFind.uppercased() == "COUCOU"){
             return 1
         } else {
