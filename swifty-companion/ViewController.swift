@@ -19,7 +19,7 @@ let grantType = "client_credentials"
 let redirectURI = "https://www.42.fr"
 let signInURL = "https://signin.intra.42.fr"
 let signOutURL = "https://signin.intra.42.fr/users/sign_out"
-var TOKEN:TokenAPI = TokenAPI(access_token:"", created_at:Date().timeIntervalSince1970, expires_in:0)
+var TOKEN:TokenAPI = TokenAPI()
 var USERID = ""
 
 
@@ -27,17 +27,21 @@ class ViewController: UIViewController, UISearchBarDelegate {
 
     @IBOutlet weak var searchField: UISearchBar!
     @IBOutlet weak var wrongValueLabel: UILabel!
-    
+    var token:TokenAPI = TokenAPI(){
+        didSet{
+            DispatchQueue.main.async{
+                self.setTokenInfo()
+            }
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         clearWrongValueLabel()
-
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //TODO autocompletion ??
@@ -46,7 +50,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
     {
-        let userInfo: Int64 = getUserInfo(toFind: searchField.text!)
+        let userInfo: Int64 = makeSearch(toFind: searchField.text!)
         
         if (userInfo == -1){
             wrongValueMessage()
@@ -67,25 +71,33 @@ class ViewController: UIViewController, UISearchBarDelegate {
         wrongValueLabel.text = ""
     }
     
-    func getUserInfo(toFind: String) -> Int64
+    func makeSearch(toFind: String) -> Int64
     {
-       if (TOKEN.created_at + TOKEN.expires_in <= Date().timeIntervalSince1970){
-            exchangeCodeForToken()
-       }
-        print(Date(timeIntervalSince1970: (TOKEN.created_at)))
+        if (TOKEN.expire_date == nil || TOKEN.expire_date! <= Date()) {
+            print("NEW TOKEN")
+            DispatchQueue.main.async{
+                self.exchangeCodeForToken()
+            }
 
+            print("NEW TOKEN AFTER")
+            print(TOKEN)
+            print("NEW TOKEN AFTER PRINT")
+
+
+       }
+        print(TOKEN)
+
+        //getUserInfo(user: toFind.lowercased())
+    
         if (toFind.uppercased() == "COUCOU"){
             return 1
         } else {
             return -1
         }
-    }
+}
     
     func exchangeCodeForToken() {
         var components = URLComponents()
-        
-// curl -X POST --data "grant_type=client_credentials&client_id=06c6f280c902a775caadda88750175568eea0d88acac67132c34468b59bf7450&client_secret=4dbaa9ac55c03b61c455c612091a46725079d844e1c6279d93dfa6876a83f4d6" https://api.intra.42.fr/oauth/token
-        
         
         components.scheme = "https";
         components.host = "api.intra.42.fr";
@@ -94,13 +106,9 @@ class ViewController: UIViewController, UISearchBarDelegate {
             URLQueryItem(name: "grant_type", value: grantType),
             URLQueryItem(name: "client_id", value: UID),
             URLQueryItem(name: "client_secret", value: SECRET),
-            //URLQueryItem(name: "code", value: code),
             URLQueryItem(name: "redirect_uri", value: redirectURI),
-            //URLQueryItem(name: "state", value: STATE),
         ]
-        
-        
-        print(components)
+
         var request = URLRequest(url: components.url!)
         request.httpMethod = "POST"
         
@@ -112,11 +120,13 @@ class ViewController: UIViewController, UISearchBarDelegate {
             else if let d = data {
                 do {
                     let jsonDecoder = JSONDecoder()
-                    let TOKEN = try jsonDecoder.decode(TokenAPI.self, from: d)
+                    TOKEN = try jsonDecoder.decode(TokenAPI.self, from: d)
+                    self.token = TOKEN
                     if (TOKEN.access_token == nil){
                         self.manageError("Login failed")
                         return
                     }
+                    print("THE TOKEN")
                     print(TOKEN)
                 }
                 catch (let err) {
@@ -125,6 +135,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
             }
         }
         getData.resume()
+        
     }
     
     
@@ -136,6 +147,78 @@ class ViewController: UIViewController, UISearchBarDelegate {
             self.present(alert, animated: true)
         }
     }
-//curl  -H "Authorization: Bearer be1107c5edc05f4a851433f72b9a7974cbea4823bdf99da424758b92bf6f1933" "https://api.intra.42.fr/v2/users/sbonnefo"
+    
+    func getUserInfo(user: String){
+        var components = URLComponents()
+        
+        components.scheme = "https";
+        components.host = "api.intra.42.fr";
+        components.path = "/v2/users/" + user
+    
+        var request = URLRequest(url: components.url!)
+        request.setValue("Bearer " + TOKEN.access_token!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "POST"
+        
+       
+        let getData = URLSession.shared.dataTask(with: request){
+            (data, response, error) in
+            if let err = error {
+                print(err)
+            }
+            else if let d = data {
+                do {
+                    print("D A T A")
+                    print(d)
+                }
+                catch (let err) {
+                        print(err)
+                }
+            }
+        }
+    getData.resume()
+    
+    }
+    
+    
+    
+    func setTokenInfo(){
+        //curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" https://api.intra.42.fr/oauth/token/info
+        
+        print("\n\n______________\n\nSET INFO")
+
+        var components = URLComponents()
+        
+        components.scheme = "https";
+        components.host = "api.intra.42.fr";
+        components.path = "/oauth/token/info"
+        
+        var request = URLRequest(url: components.url!)
+        request.httpMethod = "POST"
+
+        request.setValue("Bearer " + TOKEN.access_token!, forHTTPHeaderField: "Authorization")
+        
+        let getData = URLSession.shared.dataTask(with: request){
+            (data, response, error) in
+            if let err = error {
+                print("YOLO")
+                print(err)
+            }
+            if let d = data {
+                do {
+                    let jsonDecoder = JSONDecoder()
+                    let token_full = try jsonDecoder.decode(TokenAPI.self, from: d)
+                    print("token_full")
+                    print(token_full)
+                    print("\n\n")
+                    TOKEN.expires_in_seconds = token_full.expires_in_seconds
+                    TOKEN.expire_date = Date() + TimeInterval(TOKEN.expires_in_seconds!)
+                }
+                catch (let err) {
+                    print(err)
+                }
+            }
+        }
+        getData.resume()
+    }
 }
 
