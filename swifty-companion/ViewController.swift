@@ -21,66 +21,51 @@ let signInURL = "https://signin.intra.42.fr"
 let signOutURL = "https://signin.intra.42.fr/users/sign_out"
 var TOKEN:TokenAPI = TokenAPI()
 var USERID = ""
+var USER: UserInfo = UserInfo(){
+    didSet{
+        print(USER)
+        PERFORM_SEG = true
+    }
+}
+var PERFORM_SEG: Bool = false
 
 
 class ViewController: UIViewController, UISearchBarDelegate {
 
     @IBOutlet weak var searchField: UISearchBar!
-    @IBOutlet weak var wrongValueLabel: UILabel!
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        clearWrongValueLabel()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    //TODO autocompletion ??
-    // - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText delegate method.
-
-   
+ 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
     {
-        let userInfo: Int64 = makeSearch(toFind: searchField.text!)
-        
-        if (userInfo == -1){
-            wrongValueMessage()
-        } else {
-            print(userInfo)
-            clearWrongValueLabel()
-        }
+        self.makeSearch(toFind: self.searchField.text!)
     }
     
     func wrongValueMessage(){
         let error : String = "⚠️ \"" + searchField.text! + "\" does not exist ⚠️"
-        wrongValueLabel.text = error
         manageError(error)
     }
     
-    func clearWrongValueLabel()
-    {
-        wrongValueLabel.text = ""
-    }
+
     
-    func makeSearch(toFind: String) -> Int64
+    func makeSearch(toFind: String)
     {
         if (TOKEN.expire_date == nil || TOKEN.expire_date! <= Date()) {
-           // DispatchQueue.main.async{
                 self.exchangeCodeForToken()
-           // }
         }
-        print(TOKEN)
         DispatchQueue.main.async{
             self.getUserInfo(user: toFind.lowercased())
-        }
-    
-        if (toFind.uppercased() == "COUCOU"){
-            return 1
-        } else {
-            return -1
+            while(!PERFORM_SEG){}
+            let ProfileController: ProfileViewController = ProfileViewController()
+            self.navigationController?.pushViewController(ProfileController, animated: true)
         }
 }
     
@@ -127,8 +112,6 @@ class ViewController: UIViewController, UISearchBarDelegate {
     }
     
     
-
-    
     func getUserInfo(user: String){
         while(TOKEN.access_token == nil){}
         var components = URLComponents()
@@ -141,29 +124,29 @@ class ViewController: UIViewController, UISearchBarDelegate {
         request.setValue("Bearer " + TOKEN.access_token!, forHTTPHeaderField: "Authorization")
         request.httpMethod = "GET"
         
-        print(request)
-        
-       
         let getData = URLSession.shared.dataTask(with: request){
             (data, response, error) in
-            print("______DATA_______")
-            print(data)
-            print("______RESPONSE_______")
             if let httpResponse = response as? HTTPURLResponse {
                 if (httpResponse.statusCode != 200){
-                    print("error : \(httpResponse.statusCode)")
-                    return
+                    DispatchQueue.main.async{
+                        print("error : \(httpResponse.statusCode)")
+                        self.wrongValueMessage()
+                    }
                 }
             }
-            print("______ERROR_______")
-            print(error)
             if let err = error {
                 print(err)
             }
             else if let d = data {
                 do {
-                    print("D A T A")
-                    print(d)
+                    let jsonDecoder = JSONDecoder()
+                    USER = try jsonDecoder.decode(UserInfo.self, from: d)
+                    if (USER.id == nil){
+                        DispatchQueue.main.async{
+                            self.manageError("User does not exist")
+                            self.wrongValueMessage()
+                        }
+                    }
                 }
                 catch (let err) {
                     print(err)
