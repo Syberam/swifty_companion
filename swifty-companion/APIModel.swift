@@ -30,7 +30,7 @@ struct UserInfo: Codable {
     var correction_point: Int?
     var pool_month: String?
     var pool_year: String?
-    var loation: String?
+    var location: String?
     var wallet: Int?
     var groups: [Group]?
     var cursus_users: [CursusUser]?

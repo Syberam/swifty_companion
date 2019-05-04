@@ -12,74 +12,84 @@ import UIKit
 
 var UID = "06c6f280c902a775caadda88750175568eea0d88acac67132c34468b59bf7450"
 var SECRET = "4dbaa9ac55c03b61c455c612091a46725079d844e1c6279d93dfa6876a83f4d6"
-//let STATE = "Yolo"
+let GRANT_TYPE = "client_credentials"
 let APIBASE = "https://api.intra.42.fr/v2"
-let authURL = "https://api.intra.42.fr/oauth/token"
-let grantType = "client_credentials"
-let redirectURI = "https://www.42.fr"
-let signInURL = "https://signin.intra.42.fr"
-let signOutURL = "https://signin.intra.42.fr/users/sign_out"
-var TOKEN:TokenAPI = TokenAPI()
-var USERID = ""
-var USER: UserInfo = UserInfo(){
+let REDIRECT_URI = "https://www.42.fr"
+
+var TOKEN: TokenAPI?{
     didSet{
-        print(USER)
-        PERFORM_SEG = true
+        if (TOKEN != nil){
+            print("\n\nTOKEN :\n")
+            print(TOKEN!)
+        }
     }
 }
-var PERFORM_SEG: Bool = false
 
 
 class ViewController: UIViewController, UISearchBarDelegate {
 
     @IBOutlet weak var searchField: UISearchBar!
-
+    var currentUser: UserInfo? = UserInfo() {
+        didSet{
+            if (currentUser != nil && currentUser!.login != nil){
+                print(currentUser!)
+                self.performSegue(withIdentifier: "profileSegue", sender: currentUser)
+            }
+            else{
+                print("currentUser clear")
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if ( TOKEN == nil || TOKEN!.expire_date == nil || TOKEN!.expire_date! <= Date()) {
+            self.exchangeCodeForToken()
+        }
+        print("_____________________\n\nY O L O\n\n------------------------\n\n")
+        if (currentUser != nil){
+            currentUser = nil
+        }
     }
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
- 
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
-    {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
         self.makeSearch(toFind: self.searchField.text!)
     }
     
-    func wrongValueMessage(){
-        let error : String = "⚠️ \"" + searchField.text! + "\" does not exist ⚠️"
-        manageError(error)
+    func makeSearch(toFind: String){
+        DispatchQueue.main.async{
+            self.getUserInfo(currentUser: toFind.lowercased())
+        }
     }
     
 
     
-    func makeSearch(toFind: String)
-    {
-        if (TOKEN.expire_date == nil || TOKEN.expire_date! <= Date()) {
-                self.exchangeCodeForToken()
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "profileSegue"{
+            let vc = segue.destination as! ProfileViewController
+            vc.currentUser = self.currentUser!
+            //Data has to be a variable name in your RandomViewController
         }
-        DispatchQueue.main.async{
-            self.getUserInfo(user: toFind.lowercased())
-            while(!PERFORM_SEG){}
-            let ProfileController: ProfileViewController = ProfileViewController()
-            self.navigationController?.pushViewController(ProfileController, animated: true)
-        }
-}
+    }
+
     
     func exchangeCodeForToken() {
         var components = URLComponents()
         
         components.scheme = "https";
         components.host = "api.intra.42.fr";
-        components.path = "/oauth/token"
+        components.path = "/oauth/TOKEN"
         components.queryItems = [
-            URLQueryItem(name: "grant_type", value: grantType),
+            URLQueryItem(name: "grant_type", value: GRANT_TYPE),
             URLQueryItem(name: "client_id", value: UID),
             URLQueryItem(name: "client_secret", value: SECRET),
-            URLQueryItem(name: "redirect_uri", value: redirectURI),
+            URLQueryItem(name: "redirect_uri", value: REDIRECT_URI),
         ]
 
         var request = URLRequest(url: components.url!)
@@ -92,14 +102,19 @@ class ViewController: UIViewController, UISearchBarDelegate {
             }
             else if let d = data {
                 do {
+                    print(d)
                     let jsonDecoder = JSONDecoder()
                     TOKEN = try jsonDecoder.decode(TokenAPI.self, from: d)
-                    if (TOKEN.access_token == nil){
-                        self.manageError("Login failed")
-                        return
+                    if (TOKEN == nil || TOKEN!.access_token == nil){
+                        print("WHY")
+                        DispatchQueue.main.async {
+                            self.manageError("API 42 indisponible")
+                            return
+                        }
                     }
                     else {
-                        TOKEN.expire_date = Date() + TimeInterval(2 * 60 * 60) + TimeInterval(TOKEN.expires_in!)
+                        print("WHAAAAAAAT")
+                        TOKEN!.expire_date = Date() + TimeInterval(2 * 60 * 60) + TimeInterval(TOKEN!.expires_in!)
                     }
                 }
                 catch (let err) {
@@ -111,17 +126,17 @@ class ViewController: UIViewController, UISearchBarDelegate {
         
     }
     
-    
-    func getUserInfo(user: String){
-        while(TOKEN.access_token == nil){}
+    func getUserInfo(currentUser: String){
+        while(TOKEN == nil || TOKEN!.access_token == nil){}
+        print("\n\nYEAHAHAHAHAH\n\n")
         var components = URLComponents()
         
         components.scheme = "https";
         components.host = "api.intra.42.fr";
-        components.path = "/v2/users/" + user
+        components.path = "/v2/users/" + currentUser
     
         var request = URLRequest(url: components.url!)
-        request.setValue("Bearer " + TOKEN.access_token!, forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer " + TOKEN!.access_token!, forHTTPHeaderField: "Authorization")
         request.httpMethod = "GET"
         
         let getData = URLSession.shared.dataTask(with: request){
@@ -130,6 +145,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
                 if (httpResponse.statusCode != 200){
                     DispatchQueue.main.async{
                         print("error : \(httpResponse.statusCode)")
+                        self.currentUser = nil
                         self.wrongValueMessage()
                     }
                 }
@@ -140,10 +156,11 @@ class ViewController: UIViewController, UISearchBarDelegate {
             else if let d = data {
                 do {
                     let jsonDecoder = JSONDecoder()
-                    USER = try jsonDecoder.decode(UserInfo.self, from: d)
-                    if (USER.id == nil){
+                    self.currentUser = try jsonDecoder.decode(UserInfo.self, from: d)
+                    if ( self.currentUser == nil || self.currentUser!.id == nil){
                         DispatchQueue.main.async{
                             self.manageError("User does not exist")
+                            self.currentUser = nil
                             self.wrongValueMessage()
                         }
                     }
@@ -157,14 +174,15 @@ class ViewController: UIViewController, UISearchBarDelegate {
     }
     
     
-    
     func manageError(_ error: String) {
-        
         let alert = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
-        DispatchQueue.main.async {
-            self.present(alert, animated: true)
-        }
+        self.present(alert, animated: true)
+    }
+    
+    func wrongValueMessage(){
+        let error : String = "⚠️ \"" + searchField.text! + "\" does not exist ⚠️"
+        manageError(error)
     }
 }
 
