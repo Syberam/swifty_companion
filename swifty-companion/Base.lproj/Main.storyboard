@@ -15,12 +15,13 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="swifty_companion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                    <view key="view" autoresizesSubviews="NO" opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background_42" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qzn-AM-YBE">
-                                <rect key="frame" x="0.0" y="11" width="375" height="667"/>
+                            <imageView autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background_42" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YvA-X3-aUK">
+                                <rect key="frame" x="-80" y="8" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <searchBar contentMode="bottomLeft" barStyle="blackTranslucent" searchBarStyle="minimal" text="" prompt="Enter a student login" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oR5-oc-dFx">
                                 <rect key="frame" x="38" y="132" width="300" height="75"/>
@@ -31,22 +32,17 @@
                                 </connections>
                             </searchBar>
                         </subviews>
-                        <color key="backgroundColor" red="0.1413245875415638" green="0.19247112334266803" blue="0.28891378502153975" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="qzn-AM-YBE" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="18U-fd-a62"/>
                             <constraint firstItem="oR5-oc-dFx" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.8" id="Jpy-gy-DC1"/>
-                            <constraint firstItem="qzn-AM-YBE" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="dSL-BO-lyE"/>
                             <constraint firstItem="oR5-oc-dFx" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.8" constant="-97.5" id="hyb-T4-m7h"/>
-                            <constraint firstItem="qzn-AM-YBE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="11" id="ijw-SO-HFA"/>
                             <constraint firstItem="oR5-oc-dFx" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="pHu-K4-KSu"/>
-                            <constraint firstItem="qzn-AM-YBE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="w6x-1A-tf0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Swifty Companion" id="lND-Zf-O9Q"/>
                     <connections>
                         <outlet property="searchField" destination="oR5-oc-dFx" id="QQC-fw-l5d"/>
-                        <segue destination="dng-Eh-44P" kind="show" identifier="profileSegue" id="K1T-Ba-RCG"/>
+                        <segue destination="dng-Eh-44P" kind="show" identifier="profileSegue" animates="NO" id="K1T-Ba-RCG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -57,17 +53,21 @@
         <scene sceneID="xfS-vg-6DK">
             <objects>
                 <viewController storyboardIdentifier="profileController" id="dng-Eh-44P" customClass="ProfileViewController" customModule="swifty_companion" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="pOO-vC-mmk">
+                    <view key="view" autoresizesSubviews="NO" opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" id="pOO-vC-mmk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background_42" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C7H-hf-EyB">
+                                <rect key="frame" x="3" y="102" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jdk-22-BDw">
                                 <rect key="frame" x="19" y="69" width="338" height="26.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <color key="textColor" red="0.9881779340182929" green="1" blue="0.9791558214441699" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BHG-KT-vkQ">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BHG-KT-vkQ">
                                 <rect key="frame" x="19" y="110.5" width="150" height="164.5"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="firstNameLbl" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Cg-gc-KTw">
@@ -125,7 +125,6 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.17905589938163757" green="0.20990520715713501" blue="0.30117437243461609" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="1vI-S0-9ce" firstAttribute="top" secondItem="BHG-KT-vkQ" secondAttribute="bottom" id="2jY-tO-iL2"/>
                             <constraint firstItem="Jdk-22-BDw" firstAttribute="centerX" secondItem="pOO-vC-mmk" secondAttribute="centerX" id="4pz-oP-WaZ"/>

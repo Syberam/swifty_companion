@@ -8,8 +8,6 @@
 
 import UIKit
 
-
-
 var UID = "06c6f280c902a775caadda88750175568eea0d88acac67132c34468b59bf7450"
 var SECRET = "4dbaa9ac55c03b61c455c612091a46725079d844e1c6279d93dfa6876a83f4d6"
 let GRANT_TYPE = "client_credentials"
@@ -19,24 +17,25 @@ let REDIRECT_URI = "https://www.42.fr"
 var TOKEN: TokenAPI?{
     didSet{
         if (TOKEN != nil){
-            print("\n\nTOKEN :\n")
+            print("\n\nTOKEN 42:\n")
             print(TOKEN!)
         }
     }
 }
 
-
 class ViewController: UIViewController, UISearchBarDelegate {
 
     @IBOutlet weak var searchField: UISearchBar!
-    var currentUser: UserInfo? = UserInfo() {
+    var user: UserInfo? {
         didSet{
-            if (currentUser != nil && currentUser!.login != nil){
-                print(currentUser!)
-                self.performSegue(withIdentifier: "profileSegue", sender: currentUser)
+            print("---\nUser didSet\n---")
+            if (user != nil && user!.login != nil){
+                print("BEFORE PERFORM SEGUE")
+                self.performSegue(withIdentifier: "profileSegue", sender: self.user)
+                print("AFTER PERFORM SEGUE")
             }
             else{
-                print("currentUser clear")
+                print("-----\ncurrentUser clear\n-----")
             }
         }
     }
@@ -47,8 +46,8 @@ class ViewController: UIViewController, UISearchBarDelegate {
             self.exchangeCodeForToken()
         }
         print("_____________________\n\nY O L O\n\n------------------------\n\n")
-        if (currentUser != nil){
-            currentUser = nil
+        if (user != nil){
+            user = nil
         }
     }
 
@@ -60,21 +59,19 @@ class ViewController: UIViewController, UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
         self.makeSearch(toFind: self.searchField.text!)
+        //self.performSegue(withIdentifier: "profileSegue", sender: user)
     }
     
     func makeSearch(toFind: String){
-        DispatchQueue.main.async{
-            self.getUserInfo(currentUser: toFind.lowercased())
-        }
+        self.getUserInfo(currentUser: toFind.lowercased())
     }
     
-
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("\n\nPREPARE SEGUE\n\n")
         if segue.identifier == "profileSegue"{
+            print("\n\nPREPARE SEGUE\n\n")
             let vc = segue.destination as! ProfileViewController
-            vc.currentUser = self.currentUser!
-            //Data has to be a variable name in your RandomViewController
+            vc.currentUser = self.user!
         }
     }
 
@@ -84,36 +81,37 @@ class ViewController: UIViewController, UISearchBarDelegate {
         
         components.scheme = "https";
         components.host = "api.intra.42.fr";
-        components.path = "/oauth/TOKEN"
+        components.path = "/oauth/token"
         components.queryItems = [
             URLQueryItem(name: "grant_type", value: GRANT_TYPE),
             URLQueryItem(name: "client_id", value: UID),
             URLQueryItem(name: "client_secret", value: SECRET),
             URLQueryItem(name: "redirect_uri", value: REDIRECT_URI),
         ]
-
+        
         var request = URLRequest(url: components.url!)
         request.httpMethod = "POST"
-        
         let getData = URLSession.shared.dataTask(with: request){
             (data, response, error) in
             if let err = error {
                 print(err)
             }
-            else if let d = data {
+            if let resp = response as? HTTPURLResponse {
+                if (resp.statusCode != 200){
+                    print(resp)
+                }
+            }
+            if let d = data {
                 do {
-                    print(d)
                     let jsonDecoder = JSONDecoder()
                     TOKEN = try jsonDecoder.decode(TokenAPI.self, from: d)
                     if (TOKEN == nil || TOKEN!.access_token == nil){
-                        print("WHY")
                         DispatchQueue.main.async {
                             self.manageError("API 42 indisponible")
                             return
                         }
                     }
                     else {
-                        print("WHAAAAAAAT")
                         TOKEN!.expire_date = Date() + TimeInterval(2 * 60 * 60) + TimeInterval(TOKEN!.expires_in!)
                     }
                 }
@@ -123,12 +121,10 @@ class ViewController: UIViewController, UISearchBarDelegate {
             }
         }
         getData.resume()
-        
     }
     
     func getUserInfo(currentUser: String){
-        while(TOKEN == nil || TOKEN!.access_token == nil){}
-        print("\n\nYEAHAHAHAHAH\n\n")
+        print("\n\nUSER SEARCH\n\n")
         var components = URLComponents()
         
         components.scheme = "https";
@@ -145,7 +141,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
                 if (httpResponse.statusCode != 200){
                     DispatchQueue.main.async{
                         print("error : \(httpResponse.statusCode)")
-                        self.currentUser = nil
+                        self.user = nil
                         self.wrongValueMessage()
                     }
                 }
@@ -156,11 +152,11 @@ class ViewController: UIViewController, UISearchBarDelegate {
             else if let d = data {
                 do {
                     let jsonDecoder = JSONDecoder()
-                    self.currentUser = try jsonDecoder.decode(UserInfo.self, from: d)
-                    if ( self.currentUser == nil || self.currentUser!.id == nil){
+                    self.user = try jsonDecoder.decode(UserInfo.self, from: d)
+                    if ( self.user == nil || self.user!.id == nil){
                         DispatchQueue.main.async{
                             self.manageError("User does not exist")
-                            self.currentUser = nil
+                            self.user = nil
                             self.wrongValueMessage()
                         }
                     }

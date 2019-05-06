@@ -10,11 +10,59 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "swifty-companion/APIModel.swift"
-            timestampString = "578664946.14791"
+            timestampString = "578665635.057138"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "149"
             endingLineNumber = "149">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "swifty-companion/ViewController.swift"
+            timestampString = "578859805.5718091"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "14"
+            endingLineNumber = "14"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "globalinit_33_F12D50942BEFE19B2BAECDC598DDB289_func3"
+                  moduleName = "swifty-companion"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sbonnefo/Documents/swifty-companion/swifty-companion/ViewController.swift"
+                  timestampString = "578853170.284407"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "swifty_companion.APIBASE.unsafeMutableAddressor : Swift.String"
+                  moduleName = "swifty-companion"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sbonnefo/Documents/swifty-companion/swifty-companion/ViewController.swift"
+                  timestampString = "578853170.2865109"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "4">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
