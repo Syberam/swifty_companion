@@ -25,27 +25,30 @@ var TOKEN: TokenAPI?{
 
 class ViewController: UIViewController, UISearchBarDelegate {
 
+   
     @IBOutlet weak var searchField: UISearchBar!
+    var toSearch : String?
     var user: UserInfo? {
         didSet{
-            print("---\nUser didSet\n---")
-            if (user != nil && user!.login != nil){
-                print("BEFORE PERFORM SEGUE")
-                self.performSegue(withIdentifier: "profileSegue", sender: self.user)
-                print("AFTER PERFORM SEGUE")
-            }
-            else{
-                print("-----\ncurrentUser clear\n-----")
+            DispatchQueue.main.async {
+                if (self.user != nil && self.user!.login != nil){
+                    self.unblockUser()
+                    self.performSegue(withIdentifier: "profileSegue", sender: self)
+                }
+                else{
+                    print("-----\ncurrentUser clear\n-----")
+                }
             }
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.removeSpinner()
+        searchField.text = ""
         if ( TOKEN == nil || TOKEN!.expire_date == nil || TOKEN!.expire_date! <= Date()) {
             self.exchangeCodeForToken()
         }
-        print("_____________________\n\nY O L O\n\n------------------------\n\n")
         if (user != nil){
             user = nil
         }
@@ -58,8 +61,8 @@ class ViewController: UIViewController, UISearchBarDelegate {
     
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
-        self.makeSearch(toFind: self.searchField.text!)
-        //self.performSegue(withIdentifier: "profileSegue", sender: user)
+        self.blockUser()
+        self.makeSearch(toFind: self.toSearch!)
     }
     
     func makeSearch(toFind: String){
@@ -67,9 +70,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("\n\nPREPARE SEGUE\n\n")
         if segue.identifier == "profileSegue"{
-            print("\n\nPREPARE SEGUE\n\n")
             let vc = segue.destination as! ProfileViewController
             vc.currentUser = self.user!
         }
@@ -174,11 +175,50 @@ class ViewController: UIViewController, UISearchBarDelegate {
         let alert = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
         self.present(alert, animated: true)
+        unblockUser()
     }
     
     func wrongValueMessage(){
-        let error : String = "⚠️ \"" + searchField.text! + "\" does not exist ⚠️"
+        let error : String = "⚠️ \"" + self.toSearch! + "\" does not exist ⚠️"
         manageError(error)
+    }
+    
+    func blockUser(){
+        showSpinner(onView: self.view)
+        self.toSearch = self.searchField.text!
+        self.searchField.isUserInteractionEnabled = false
+        
+    }
+    
+    func unblockUser(){
+        self.searchField.isUserInteractionEnabled = true
+        self.removeSpinner()
+    }
+    
+}
+
+var vSpinner : UIView?
+extension UIViewController {
+    func showSpinner(onView : UIView) {
+        let spinnerView = UIView.init(frame: onView.bounds)
+        spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
+        let ai = UIActivityIndicatorView.init()
+        ai.startAnimating()
+        ai.center = spinnerView.center
+        
+        DispatchQueue.main.async {
+            spinnerView.addSubview(ai)
+            onView.addSubview(spinnerView)
+        }
+        
+        vSpinner = spinnerView
+    }
+    
+    func removeSpinner() {
+        DispatchQueue.main.async {
+            vSpinner?.removeFromSuperview()
+            vSpinner = nil
+        }
     }
 }
 
