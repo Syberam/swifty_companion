@@ -44,8 +44,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.removeSpinner()
-        searchField.text = ""
+        self.unblockUser()
         if ( TOKEN == nil || TOKEN!.expire_date == nil || TOKEN!.expire_date! <= Date()) {
             self.exchangeCodeForToken()
         }
@@ -187,11 +186,11 @@ class ViewController: UIViewController, UISearchBarDelegate {
         showSpinner(onView: self.view)
         self.toSearch = self.searchField.text!
         self.searchField.isUserInteractionEnabled = false
-        
     }
     
     func unblockUser(){
         self.searchField.isUserInteractionEnabled = true
+        self.searchField.text = ""
         self.removeSpinner()
     }
     

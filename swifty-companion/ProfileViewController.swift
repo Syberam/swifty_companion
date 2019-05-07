@@ -10,16 +10,15 @@ import Foundation
 import UIKit
 
 class ProfileViewController: UIViewController {
+
     @IBOutlet weak var studentLogin: UILabel!
+    @IBOutlet weak var profileImg: UIImageView!
+    @IBOutlet weak var levelLbl: UILabel!
+    
     @IBOutlet weak var firstNameLbl: UILabel!
     @IBOutlet weak var lastNameLbl: UILabel!
     @IBOutlet weak var phoneLbl: UILabel!
     @IBOutlet weak var emailLbl: UILabel!
-    
-    
-    @IBOutlet weak var profileImg: UIImageView!
-    @IBOutlet weak var lvlLabel: UILabel!
-    
     
     var currentUser: UserInfo = UserInfo()
     
@@ -36,7 +35,7 @@ class ProfileViewController: UIViewController {
             level = String(describing: currentUser.cursus_users![0].level!)
         }
         else{level = "ø"}
-        setValue(elem: lvlLabel, value: "Level : \(level)")
+        setValue(elem: levelLbl, value: "Level : \(level)")
         
         if let picUrl = currentUser.image_url{
             if let url = URL(string: picUrl), let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
