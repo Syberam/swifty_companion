@@ -44,7 +44,6 @@ class ViewController: UIViewController, UISearchBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.unblockUser()
         if ( TOKEN == nil || TOKEN!.expire_date == nil || TOKEN!.expire_date! <= Date()) {
             self.exchangeCodeForToken()
         }
@@ -79,6 +78,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
     func exchangeCodeForToken() {
         var components = URLComponents()
         
+        self.blockUser()
         components.scheme = "https";
         components.host = "api.intra.42.fr";
         components.path = "/oauth/token"
@@ -94,10 +94,18 @@ class ViewController: UIViewController, UISearchBarDelegate {
         let getData = URLSession.shared.dataTask(with: request){
             (data, response, error) in
             if let err = error {
+                DispatchQueue.main.async {
+                    self.manageError("Problème de connexion")
+                    return
+                }
                 print(err)
             }
             if let resp = response as? HTTPURLResponse {
                 if (resp.statusCode != 200){
+                    DispatchQueue.main.async {
+                        self.manageError("Probleme de connexion")
+                        return
+                    }
                     print(resp)
                 }
             }
@@ -113,6 +121,10 @@ class ViewController: UIViewController, UISearchBarDelegate {
                     }
                     else {
                         TOKEN!.expire_date = Date() + TimeInterval(2 * 60 * 60) + TimeInterval(TOKEN!.expires_in!)
+                        DispatchQueue.main.async {
+                            self.unblockUser()
+                        }
+                        
                     }
                 }
                 catch (let err) {
