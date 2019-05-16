@@ -143,13 +143,39 @@
                                         <rect key="frame" x="-0.5" y="439" width="375" height="167"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="lKm-mr-PtB">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="projectCell" id="lKm-mr-PtB" customClass="ProjectTableViewCell" customModule="swifty_companion" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lKm-mr-PtB" id="beb-yl-RBB">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ProjectMark" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2UM-wL-zrt">
+                                                            <rect key="frame" x="300" y="11" width="75" height="21"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ProjectName" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ioW-KC-Spx">
+                                                            <rect key="frame" x="0.0" y="11" width="262.5" height="21"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="2UM-wL-zrt" secondAttribute="trailing" id="Dlf-Xs-eB2"/>
+                                                        <constraint firstItem="ioW-KC-Spx" firstAttribute="centerY" secondItem="beb-yl-RBB" secondAttribute="centerY" id="MEp-lw-do1"/>
+                                                        <constraint firstItem="ioW-KC-Spx" firstAttribute="leading" secondItem="beb-yl-RBB" secondAttribute="leading" id="Nqn-PZ-hJo"/>
+                                                        <constraint firstItem="2UM-wL-zrt" firstAttribute="width" secondItem="beb-yl-RBB" secondAttribute="width" multiplier="0.2" id="en5-pC-pYF"/>
+                                                        <constraint firstItem="ioW-KC-Spx" firstAttribute="width" secondItem="beb-yl-RBB" secondAttribute="width" multiplier="0.7" id="sLQ-W1-7pY"/>
+                                                        <constraint firstItem="2UM-wL-zrt" firstAttribute="centerY" secondItem="beb-yl-RBB" secondAttribute="centerY" id="u0R-8e-FKg"/>
+                                                    </constraints>
                                                 </tableViewCellContentView>
+                                                <connections>
+                                                    <outlet property="projectMarkLbl" destination="2UM-wL-zrt" id="PBp-oM-893"/>
+                                                    <outlet property="projectNameLbl" destination="ioW-KC-Spx" id="QDZ-R9-jj8"/>
+                                                </connections>
                                             </tableViewCell>
                                         </prototypes>
                                         <sections/>
@@ -208,12 +234,14 @@
                         <viewLayoutGuide key="safeArea" id="KkE-Xa-4cN"/>
                     </view>
                     <connections>
+                        <outlet property="ProjectsTableView" destination="cZJ-vv-x0v" id="HvV-cY-1JW"/>
                         <outlet property="emailLbl" destination="vaa-Un-f4Q" id="8Zz-6p-p34"/>
                         <outlet property="firstNameLbl" destination="sEc-vR-JvS" id="we1-8m-Mys"/>
                         <outlet property="lastNameLbl" destination="6ac-t9-EKx" id="Yn1-sK-8k3"/>
                         <outlet property="levelLbl" destination="1vI-S0-9ce" id="NhF-nJ-Un6"/>
                         <outlet property="phoneLbl" destination="NF2-w5-qYO" id="EeU-Ra-rGl"/>
                         <outlet property="profileImg" destination="BHG-KT-vkQ" id="ha3-Sf-e17"/>
+                        <outlet property="projectsTableView" destination="cZJ-vv-x0v" id="Ph6-0g-VGG"/>
                         <outlet property="studentLogin" destination="Jdk-22-BDw" id="iiY-Yf-ADZ"/>
                     </connections>
                 </viewController>

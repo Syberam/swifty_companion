@@ -33,6 +33,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
             DispatchQueue.main.async {
                 if (self.user != nil && self.user!.login != nil){
                     self.unblockUser()
+                    
                     self.performSegue(withIdentifier: "profileSegue", sender: self)
                 }
                 else{
@@ -232,4 +233,3 @@ extension UIViewController {
         }
     }
 }
-

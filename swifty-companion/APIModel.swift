@@ -34,6 +34,7 @@ struct UserInfo: Codable {
     var wallet: Int?
     var groups: [Group]?
     var cursus_users: [CursusUser]?
+    var projects_users: [ProjectsUser]?
     var achievements: [Achievement]?
     var titles: [Titles]?
     var titles_users: [TitlesUsers]?
@@ -126,13 +127,25 @@ struct ProjectsUser: Codable{
     var cursus_ids: [Int]?
     var marked_at: String?
     var marked: Bool?
+    enum CodingKeys: String, CodingKey {
+        case id
+        case occurrence
+        case final_mark
+        case status
+        case validated = "validated?"
+        case current_team_id
+        case project
+        case cursus_ids
+        case marked_at
+        case marked
+    }
 }
 
 struct Project: Codable{
     var id: Int
     var name: String?
     var slug: String?
-    var parent_id: String?
+    var parent_id: Int?
 }
 
 struct Achievement: Codable{

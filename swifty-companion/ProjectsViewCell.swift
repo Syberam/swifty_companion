@@ -10,22 +10,37 @@ import UIKit
 
 class ProjectTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var projectNameLbl: UILabel!
+    @IBOutlet weak var projectMarkLbl: UILabel!
     
-    var victime : UserInfo? {
+    var project : ProjectsUser? {
         didSet {
-            if let vic = victime{
-//                nameLabel?.text = vic.name
-//                descriptionLabel?.text = vic.desc
-//
-//                let formatter = DateFormatter()
-//                // initially set the format based on your datepicker date / server String
-//                formatter.dateFormat = "dd-MM-yyyy"
-//
-//                let deathDate = formatter.string(from: vic.date)
-//                dateLabel?.text = deathDate
+            projectMarkLbl.text = "Ø"
+            projectMarkLbl.textColor = UIColor.black
+            projectNameLbl.text = ""
+            self.backgroundColor = UIColor.white
+            if let proj = project{
+                projectNameLbl.text = proj.project!.name
+                if let mark = project?.marked{
+                    if mark{
+                        if let val = proj.validated{
+                            if val{
+                                projectMarkLbl.textColor = UIColor.green
+                            }
+                            else{
+                                projectMarkLbl.textColor = UIColor.red
+                            }
+                        }
+                        if let mark = proj.final_mark{
+                            projectMarkLbl.text = "\(mark)"
+                        }
+                    }
+                    else{
+                        self.backgroundColor = UIColor.gray
+
+                    }
+                }
+                
             }
         }
     }
