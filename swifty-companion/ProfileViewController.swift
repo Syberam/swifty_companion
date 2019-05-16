@@ -25,6 +25,7 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(currentUser)
         setValue(elem: studentLogin,value: currentUser.login)
         setValue(elem: firstNameLbl, value: currentUser.first_name)
         setValue(elem: lastNameLbl, value: currentUser.last_name)
