@@ -31,9 +31,8 @@ class ViewController: UIViewController, UISearchBarDelegate {
     var user: UserInfo? {
         didSet{
             DispatchQueue.main.async {
+               
                 if (self.user != nil && self.user!.login != nil){
-                    self.unblockUser()
-                    
                     self.performSegue(withIdentifier: "profileSegue", sender: self)
                 }
                 else{
@@ -45,12 +44,17 @@ class ViewController: UIViewController, UISearchBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        DispatchQueue.main.async {
+            self.unblockUser()
+        }
         if ( TOKEN == nil || TOKEN!.expire_date == nil || TOKEN!.expire_date! <= Date()) {
             self.exchangeCodeForToken()
         }
         if (user != nil){
             user = nil
         }
+
+        
     }
 
     
@@ -70,6 +74,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "profileSegue"{
+            self.unblockUser()
             let vc = segue.destination as! ProfileViewController
             vc.currentUser = self.user!
         }
@@ -97,6 +102,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
             if let err = error {
                 DispatchQueue.main.async {
                     self.manageError("Problème de connexion")
+                    self.blockUser()
                     return
                 }
                 print(err)
@@ -105,6 +111,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
                 if (resp.statusCode != 200){
                     DispatchQueue.main.async {
                         self.manageError("Probleme de connexion")
+                        self.blockUser()
                         return
                     }
                     print(resp)
@@ -125,9 +132,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
                         TOKEN!.expire_date = Date() + TimeInterval(2 * 60 * 60) + TimeInterval(TOKEN!.expires_in!)
                         DispatchQueue.main.async {
                             self.unblockUser()
-                            self.blockUser()
                         }
-                        
                     }
                 }
                 catch (let err) {
