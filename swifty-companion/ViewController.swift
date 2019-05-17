@@ -117,6 +117,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
                     if (TOKEN == nil || TOKEN!.access_token == nil){
                         DispatchQueue.main.async {
                             self.manageError("API 42 indisponible")
+                            self.blockUser()
                             return
                         }
                     }
@@ -124,6 +125,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
                         TOKEN!.expire_date = Date() + TimeInterval(2 * 60 * 60) + TimeInterval(TOKEN!.expires_in!)
                         DispatchQueue.main.async {
                             self.unblockUser()
+                            self.blockUser()
                         }
                         
                     }
