@@ -31,6 +31,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    @IBOutlet weak var skillsTableView: UITableView!{
+        didSet {
+            skillsTableView.delegate = self
+            skillsTableView.dataSource = self
+        }
+    }
+  
+    
     
     
     override func viewDidLoad() {
@@ -95,6 +103,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if tableView == self.projectsTableView {
             let cell = tableView.dequeueReusableCell(withIdentifier: "projectCell") as! ProjectTableViewCell
             cell.project = currentUser.projects_users![indexPath.row]
+            return cell
+        } else if tableView == self.skillsTableView {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "skillCell") as! SkillsTableViewCell
+            cell.skill = currentUser.cursus_users![0].skills![indexPath.row]
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "skillCell") as! SkillsTableViewCell

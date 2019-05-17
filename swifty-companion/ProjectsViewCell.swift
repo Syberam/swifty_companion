@@ -18,7 +18,7 @@ class ProjectTableViewCell: UITableViewCell {
             projectMarkLbl.text = "Ø"
             projectMarkLbl.textColor = UIColor.black
             projectNameLbl.text = ""
-            self.backgroundColor = UIColor.white
+            self.backgroundColor = UIColor(red:0.54,green:0.6,blue:0.4,alpha:0.5)
             if let proj = project{
                 projectNameLbl.text = proj.project!.name
                 if let mark = project?.marked{
