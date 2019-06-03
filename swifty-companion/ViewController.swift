@@ -32,6 +32,9 @@ class ViewController: UIViewController, UISearchBarDelegate {
         didSet{
             DispatchQueue.main.async {
                 if (self.user != nil && self.user!.login != nil){
+                    if ( TOKEN == nil || TOKEN!.expire_date == nil || TOKEN!.expire_date! <= Date()) {
+                        self.exchangeCodeForToken()
+                    }
                     self.performSegue(withIdentifier: "profileSegue", sender: self)
                 }
                 else{
