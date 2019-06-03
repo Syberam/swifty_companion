@@ -14,8 +14,7 @@ class SkillsTableViewCell: UITableViewCell {
     @IBOutlet weak var skillNameLbl: UILabel!
     @IBOutlet weak var skillLvlBar: UIProgressView!
     @IBOutlet weak var lvlLbl: UILabel!
-    
-    
+    @IBOutlet weak var percentLbl: UILabel!
     
     var skill : Skills? {
         didSet {
@@ -23,7 +22,9 @@ class SkillsTableViewCell: UITableViewCell {
             if let sk = skill{
                 skillNameLbl.text = sk.name
                 lvlLbl.text = String(sk.level!)
-                skillLvlBar.setProgress(sk.level! / 30, animated: true)
+                let percent = sk.level! / 30
+                skillLvlBar.setProgress(percent, animated: true)
+                percentLbl.text = "\(round(percent * 1000) / 10)%"
             }
         }
     }

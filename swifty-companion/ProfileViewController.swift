@@ -39,7 +39,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
   
     
-
     
     
     override func viewDidLoad() {
@@ -55,6 +54,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         self.currentUser.projects_users?.sort(){ $0.id! < $1.id! }
         //self.currentUser.projects_users?.sort(){ $0.cursus_ids![0] > $1.cursus_ids![0] }
         
+        print(self.currentUser.projects_users!)
         if (currentUser.cursus_users![0].level != nil ){
             level = String(describing: currentUser.cursus_users![0].level!)
         }

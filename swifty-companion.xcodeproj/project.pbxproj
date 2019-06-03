@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6550B4CF228D931B002644A3 /* ProjectsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6550B4CE228D931B002644A3 /* ProjectsViewCell.swift */; };
-		6550B4D1228DA0DE002644A3 /* SkillsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6550B4D0228DA0DE002644A3 /* SkillsViewCell.swift */; };
+		6550B4CF228D931B002644A3 /* ProjectsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6550B4CE228D931B002644A3 /* ProjectsTableViewCell.swift */; };
+		6550B4D1228DA0DE002644A3 /* SkillsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6550B4D0228DA0DE002644A3 /* SkillsTableViewCell.swift */; };
 		65670E78225FAD7300BBD3C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65670E77225FAD7300BBD3C4 /* AppDelegate.swift */; };
 		65670E7A225FAD7300BBD3C4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65670E79225FAD7300BBD3C4 /* ViewController.swift */; };
 		65670E7D225FAD7300BBD3C4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 65670E7B225FAD7300BBD3C4 /* Main.storyboard */; };
@@ -19,8 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6550B4CE228D931B002644A3 /* ProjectsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsViewCell.swift; sourceTree = "<group>"; };
-		6550B4D0228DA0DE002644A3 /* SkillsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillsViewCell.swift; sourceTree = "<group>"; };
+		6550B4CE228D931B002644A3 /* ProjectsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProjectsTableViewCell.swift; path = "swifty-companion/ProjectsTableViewCell.swift"; sourceTree = SOURCE_ROOT; };
+		6550B4D0228DA0DE002644A3 /* SkillsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SkillsTableViewCell.swift; path = "swifty-companion/SkillsTableViewCell.swift"; sourceTree = SOURCE_ROOT; };
 		65670E74225FAD7300BBD3C4 /* swifty-companion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swifty-companion.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		65670E77225FAD7300BBD3C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		65670E79225FAD7300BBD3C4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -70,8 +70,8 @@
 				65670E80225FAD7300BBD3C4 /* LaunchScreen.storyboard */,
 				65670E83225FAD7300BBD3C4 /* Info.plist */,
 				65A887FE22722B7700F6DF13 /* APIModel.swift */,
-				6550B4CE228D931B002644A3 /* ProjectsViewCell.swift */,
-				6550B4D0228DA0DE002644A3 /* SkillsViewCell.swift */,
+				6550B4CE228D931B002644A3 /* ProjectsTableViewCell.swift */,
+				6550B4D0228DA0DE002644A3 /* SkillsTableViewCell.swift */,
 			);
 			path = "swifty-companion";
 			sourceTree = "<group>";
@@ -148,9 +148,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6550B4CF228D931B002644A3 /* ProjectsViewCell.swift in Sources */,
+				6550B4CF228D931B002644A3 /* ProjectsTableViewCell.swift in Sources */,
 				65670E7A225FAD7300BBD3C4 /* ViewController.swift in Sources */,
-				6550B4D1228DA0DE002644A3 /* SkillsViewCell.swift in Sources */,
+				6550B4D1228DA0DE002644A3 /* SkillsTableViewCell.swift in Sources */,
 				65A887FF22722B7700F6DF13 /* APIModel.swift in Sources */,
 				65E3771A227B1DF200DED099 /* ProfileViewController.swift in Sources */,
 				65670E78225FAD7300BBD3C4 /* AppDelegate.swift in Sources */,
