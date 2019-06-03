@@ -8,8 +8,8 @@
 
 import UIKit
 
-var UID = "06c6f280c902a775caadda88750175568eea0d88acac67132c34468b59bf7450"
-var SECRET = "4dbaa9ac55c03b61c455c612091a46725079d844e1c6279d93dfa6876a83f4d6"
+var UID = "06c6f280c902a775caadda88750175568eea0d88acac67132c34468b59bf7450" //this project is now delete
+var SECRET = "4dbaa9ac55c03b61c455c612091a46725079d844e1c6279d93dfa6876a83f4d6" //doesn't exist anymore
 let GRANT_TYPE = "client_credentials"
 let APIBASE = "https://api.intra.42.fr/v2"
 let REDIRECT_URI = "https://www.42.fr"
@@ -31,7 +31,6 @@ class ViewController: UIViewController, UISearchBarDelegate {
     var user: UserInfo? {
         didSet{
             DispatchQueue.main.async {
-               
                 if (self.user != nil && self.user!.login != nil){
                     self.performSegue(withIdentifier: "profileSegue", sender: self)
                 }
@@ -42,8 +41,8 @@ class ViewController: UIViewController, UISearchBarDelegate {
         }
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    override func viewDidAppear(_ animated: Bool) {
         DispatchQueue.main.async {
             self.unblockUser()
         }
@@ -53,8 +52,11 @@ class ViewController: UIViewController, UISearchBarDelegate {
         if (user != nil){
             user = nil
         }
-
-        
+    }
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
     }
 
     
@@ -163,6 +165,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
                         print("error : \(httpResponse.statusCode)")
                         self.user = nil
                         self.wrongValueMessage()
+                        return
                     }
                 }
             }
