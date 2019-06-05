@@ -1,6 +1,6 @@
-##SWIFTY COMPANION
+# SWIFTY COMPANION
 
-swifty companion is an ios app to show student informations
-This display some informations get with the 42 API v2
+Swifty companion is an ios app to show student informations</br>
+This display some informations get with the 42 API v2</br>
 
-![](demoSwiftyCompanion.gif)
+![App quick demo](demoSwiftyCompanion.gif)
