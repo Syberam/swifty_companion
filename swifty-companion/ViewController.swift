@@ -8,8 +8,8 @@
 
 import UIKit
 
-var UID = "06c6f280c902a775caadda88750175568eea0d88acac67132c34468b59bf7450"
-var SECRET = "4dbaa9ac55c03b61c455c612091a46725079d844e1c6279d93dfa6876a83f4d6"
+var UID = "06c6f280c902a775caadda88750175568eea0d88acac67132c34468b59bf7450" //revoked
+var SECRET = "4dbaa9ac55c03b61c455c612091a46725079d844e1c6279d93dfa6876a83f4d6" //revoked
 let GRANT_TYPE = "client_credentials"
 let APIBASE = "https://api.intra.42.fr/v2"
 let REDIRECT_URI = "https://www.42.fr"
